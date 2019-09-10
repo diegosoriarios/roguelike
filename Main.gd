@@ -2,6 +2,7 @@ extends Node2D
 
 var Room = preload("res://Room.tscn")
 var Player = preload("res://Character.tscn")
+var Enemy = preload("res://Enemy.tscn")
 var font = preload("res://assets/RobotoBold120.tres")
 onready var Map = $TileMap
 
@@ -17,6 +18,7 @@ var start_room = null
 var end_room = null
 var play_mode = false  
 var player = null
+var enemy = null
 
 func _ready():
 	randomize()
@@ -83,6 +85,13 @@ func _input(event):
 		player = Player.instance()
 		add_child(player)
 		player.position = start_room.position
+		
+		enemy = Enemy.instance()
+		add_child(enemy)
+		enemy.position = start_room.position
+		enemy.position.x += 64
+		enemy.position.y += 64
+		
 		play_mode = true
 
 func find_mst(nodes):
