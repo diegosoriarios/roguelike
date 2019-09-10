@@ -5,7 +5,8 @@ var isAttacking
 
 func _physics_process(delta):
 	var areas = get_overlapping_areas()
-	isAttacking = $".."/Character.attack
+	#isAttacking = $".."/Character.attack
+	isAttacking = true
 	
 	for area in areas:
 		if area.name == "Sword" and isAttacking:

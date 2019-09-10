@@ -3,6 +3,7 @@ extends Node2D
 var Room = preload("res://Room.tscn")
 var Player = preload("res://Character.tscn")
 var Enemy = preload("res://Enemy.tscn")
+var Potion = preload("res://Potion.tscn")
 var font = preload("res://assets/RobotoBold120.tres")
 onready var Map = $TileMap
 
@@ -134,6 +135,8 @@ func make_map():
 	find_start_room()
 	find_end_room()
 	
+	add_enemy_to_rooms()
+	
 	# Fill TileMap with walls, then carve empty rooms
 	var full_rect = Rect2()
 	for room in $Rooms.get_children():
@@ -154,7 +157,10 @@ func make_map():
 		var ul = (room.position / tile_size).floor() - s
 		for x in range(2, s.x * 2 - 1):
 			for y in range(2, s.y * 2 - 1):
-				Map.set_cell(ul.x + x, ul.y + y, 0)
+				if randf() > .9:
+					Map.set_cell(ul.x + x, ul.y + y, 2)
+				else:
+					Map.set_cell(ul.x + x, ul.y + y, 0)
 		# Carve connecting corridor
 		var p = path.get_closest_point(Vector3(room.position.x, 
 											room.position.y, 0))
@@ -199,3 +205,11 @@ func find_end_room():
 		if room.position.x > max_x:
 			end_room = room
 			max_x = room.position.x
+
+func add_enemy_to_rooms():
+	for room in $Rooms.get_children():
+		enemy = Enemy.instance()
+		add_child(enemy)
+		enemy.position = room.position
+		#enemy.position.x = rand_range(-32, 32)
+		#enemy.position.y = rand_range(-32, 32)
