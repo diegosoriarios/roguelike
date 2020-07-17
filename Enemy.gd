@@ -18,3 +18,6 @@ func _physics_process(delta):
 	for body in bodies:
 		if body.name == "Character":
 			$".."/Character.get_hit()
+
+func hit():
+	print("hit")

@@ -5,7 +5,7 @@
 [ext_resource path="res://assets/v1.1 dungeon crawler 16x16 pixel pack/tiles/floor/floor_9.png" type="Texture" id=3]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
-points = PoolVector2Array( -16, -16, 16, -16, 16, 16, -16, 16 )
+points = PoolVector2Array( 0, 0, 16.4869, 0, 16.4869, 16.7361, 0, 16.7361 )
 
 [resource]
 0/name = "Grass"
@@ -31,7 +31,7 @@ points = PoolVector2Array( -16, -16, 16, -16, 16, 16, -16, 16 )
 "one_way": false,
 "one_way_margin": 1.0,
 "shape": SubResource( 1 ),
-"shape_transform": Transform2D( 1, 0, 0, 1, 16, 16 )
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 } ]
 1/z_index = 0
 2/name = "Grass"
@@ -42,11 +42,5 @@ points = PoolVector2Array( -16, -16, 16, -16, 16, 16, -16, 16 )
 2/tile_mode = 0
 2/occluder_offset = Vector2( 16, 16 )
 2/navigation_offset = Vector2( 16, 16 )
-2/shapes = [ {
-"autotile_coord": Vector2( 0, 0 ),
-"one_way": false,
-"one_way_margin": 0.0,
-"shape": null,
-"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
-} ]
+2/shapes = [  ]
 2/z_index = 0
