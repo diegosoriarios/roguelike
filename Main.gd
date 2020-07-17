@@ -20,6 +20,7 @@ var end_room = null
 var play_mode = false  
 var player = null
 var enemy = null
+var playing = false
 
 func _ready():
 	randomize()
@@ -70,7 +71,7 @@ func _process(delta):
 	update()
 	
 func _input(event):
-	if event.is_action_pressed('ui_select'):
+	if event.is_action_pressed('ui_select') and !play_mode:
 		if play_mode:
 			player.queue_free()
 			play_mode = false
@@ -80,18 +81,19 @@ func _input(event):
 		start_room = null
 		end_room = null
 		make_rooms()
-	if event.is_action_pressed('ui_focus_next'):
+	if event.is_action_pressed('ui_focus_next') and !play_mode:
 		make_map()
 	if event.is_action_pressed('ui_cancel'):
 		player = Player.instance()
-		add_child(player)
 		player.position = start_room.position
+		add_child(player)
 		
 		enemy = Enemy.instance()
-		add_child(enemy)
 		enemy.position = start_room.position
 		enemy.position.x += 64
 		enemy.position.y += 64
+		
+		add_child(enemy)
 		
 		play_mode = true
 

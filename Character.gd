@@ -6,6 +6,7 @@ var animationFrame = 0
 export var attack = false
 var velocity = Vector2()
 var lifes = 3
+onready var timer = Timer.new()
 
 func _input(event):
 	if event.is_action_pressed('scroll_up'):
@@ -40,7 +41,23 @@ func get_input():
 	else:
 		$Sprite.play("idle")
 	
+	if Input.is_action_just_pressed("dash"):
+		dash()
+	
 	velocity = velocity.normalized() * speed
+
+func dash():
+	speed = 1000
+	timer.wait_time = .1
+	timer.one_shot = true
+	add_child(timer)
+	timer.start()
+	timer.connect("timeout", self, "_on_time_out")
+
+func _on_time_out():
+	speed = 250
+	remove_child(find_node("Timer"))
+	print($".".get_children())
 
 func _physics_process(delta):
 	get_input()
