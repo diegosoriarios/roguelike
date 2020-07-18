@@ -131,10 +131,10 @@ func _on_can_dash_time_out():
 func _physics_process(delta):
 	get_input()
 	
-	if mana_update:
-		mana += rand_range(0, 10)
-		get_parent().find_node("CanvasLayer").find_node("Label").text = "Mana: " + str(floor(mana)) 
-		mana = min(mana, 100)
+	#if mana_update:
+	#	mana += rand_range(0, 10)
+	#	get_parent().find_node("CanvasLayer").find_node("Label").text = "Mana: " + str(floor(mana)) 
+	#	mana = min(mana, 100)
 	
 	#Attack
 	if attack:

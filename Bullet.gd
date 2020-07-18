@@ -39,7 +39,6 @@ func _physics_process(delta):
 			queue_free()
 	
 	for area in areas:
-		print(area.name)
 		if area.is_in_group("enemies"):
 			var p = area.get_global_position() - self.get_global_position()
 			area.hit()

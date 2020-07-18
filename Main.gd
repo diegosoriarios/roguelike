@@ -4,6 +4,8 @@ var Room = preload("res://Room.tscn")
 var Player = preload("res://Wizzard.tscn")
 var Enemy = preload("res://Enemy.tscn")
 var Potion = preload("res://Potion.tscn")
+var Hatch = preload("res://Hatch.tscn")
+var Chest = preload("res://Chest.tscn")
 var font = preload("res://assets/RobotoBold120.tres")
 onready var Map = $TileMap
 
@@ -51,8 +53,15 @@ func make_rooms():
 			
 func _draw():
 	if start_room:
+		var chest = Chest.instance()
+		add_child(chest)
+		chest.position = start_room.position
 		draw_string(font, start_room.position-Vector2(125,0), "start", Color(1,1,1))
 	if end_room:
+		var hatch = Hatch.instance()
+		add_child(hatch)
+		hatch.position = end_room.position
+		
 		draw_string(font, end_room.position-Vector2(125,0), "end", Color(1,1,1))
 	if play_mode:
 		return
@@ -213,7 +222,6 @@ func add_enemy_to_rooms():
 		if (randf() > .5):
 			enemy = Enemy.instance()
 			add_child(enemy)
-			print(room.position)
 			enemy.position = room.position
 			var size_x = rand_range(-room.size.x/2, room.size.x/2)
 			var size_y = rand_range(-room.size.y/2, room.size.y/2)

@@ -1,0 +1,54 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://assets/chest.png" type="Texture" id=1]
+[ext_resource path="res://assets/Keyboard Black.png" type="Texture" id=2]
+[ext_resource path="res://assets/Keyboard Black(pressed).png" type="Texture" id=3]
+[ext_resource path="res://Chest.gd" type="Script" id=4]
+
+[sub_resource type="RectangleShape2D" id=1]
+
+[sub_resource type="Animation" id=2]
+resource_name = "open"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4, 0.6, 0.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 77, 78, 79, 80, 81 ]
+}
+
+[sub_resource type="SpriteFrames" id=3]
+animations = [ {
+"frames": [ ExtResource( 2 ), ExtResource( 3 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[node name="Chest" type="Area2D"]
+script = ExtResource( 4 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+vframes = 12
+hframes = 7
+frame = 77
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/open = SubResource( 2 )
+
+[node name="Keyboard" type="AnimatedSprite" parent="."]
+visible = false
+position = Vector2( 0, -18 )
+z_index = 4
+frames = SubResource( 3 )
+[connection signal="body_entered" from="." to="." method="_on_Chest_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_Chest_body_exited"]
