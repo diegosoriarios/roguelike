@@ -20,4 +20,6 @@ func _physics_process(delta):
 			$".."/Character.get_hit()
 
 func hit():
-	print("hit")
+	lives -= 1
+	if lives == 0:
+		queue_free()

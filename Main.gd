@@ -1,7 +1,7 @@
 extends Node2D
 
 var Room = preload("res://Room.tscn")
-var Player = preload("res://Character.tscn")
+var Player = preload("res://Wizzard.tscn")
 var Enemy = preload("res://Enemy.tscn")
 var Potion = preload("res://Potion.tscn")
 var font = preload("res://assets/RobotoBold120.tres")
@@ -210,8 +210,14 @@ func find_end_room():
 
 func add_enemy_to_rooms():
 	for room in $Rooms.get_children():
-		enemy = Enemy.instance()
-		add_child(enemy)
-		enemy.position = room.position
-		#enemy.position.x = rand_range(-32, 32)
-		#enemy.position.y = rand_range(-32, 32)
+		if (randf() > .5):
+			enemy = Enemy.instance()
+			add_child(enemy)
+			print(room.position)
+			enemy.position = room.position
+			var size_x = rand_range(-room.size.x/2, room.size.x/2)
+			var size_y = rand_range(-room.size.y/2, room.size.y/2)
+			var pos_x = room.position.x + size_x
+			var pos_y = room.position.y + size_y
+			enemy.position.x = pos_x
+			enemy.position.y = pos_y
