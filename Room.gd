@@ -1,6 +1,7 @@
 extends RigidBody2D
 
 var size
+var enemies = []
 
 func make_room(_pos, _size):
 	position = _pos

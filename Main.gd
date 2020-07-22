@@ -1,7 +1,8 @@
 extends Node2D
 
 var Room = preload("res://Room.tscn")
-var Player = preload("res://Wizzard.tscn")
+#var Player = preload("res://Wizzard.tscn")
+var Player = preload("res://Warrior.tscn")
 var Enemy = preload("res://Enemy.tscn")
 var Potion = preload("res://Potion.tscn")
 var Hatch = preload("res://Hatch.tscn")
@@ -50,18 +51,12 @@ func make_rooms():
 	yield(get_tree(), 'idle_frame')
 	# generate a minimum spanning tree connecting the rooms
 	path = find_mst(room_positions)
-			
+	make_map()
+
 func _draw():
 	if start_room:
-		var chest = Chest.instance()
-		add_child(chest)
-		chest.position = start_room.position
 		draw_string(font, start_room.position-Vector2(125,0), "start", Color(1,1,1))
 	if end_room:
-		var hatch = Hatch.instance()
-		add_child(hatch)
-		hatch.position = end_room.position
-		
 		draw_string(font, end_room.position-Vector2(125,0), "end", Color(1,1,1))
 	if play_mode:
 		return
@@ -95,7 +90,9 @@ func _input(event):
 	if event.is_action_pressed('ui_cancel'):
 		player = Player.instance()
 		player.position = start_room.position
+		player.set_name("Player")
 		add_child(player)
+		
 		
 		enemy = Enemy.instance()
 		enemy.position = start_room.position
@@ -160,6 +157,16 @@ func make_map():
 		for y in range(topleft.y, bottomright.y):
 			Map.set_cell(x, y, 1)	
 	
+	#START ROOM
+	var chest = Chest.instance()
+	add_child(chest)
+	chest.position = start_room.position
+	
+	#HATCH
+	var hatch = Hatch.instance()
+	add_child(hatch)
+	hatch.position = end_room.position
+	
 	# Carve rooms
 	var corridors = []  # One corridor per connection
 	for room in $Rooms.get_children():
@@ -183,7 +190,9 @@ func make_map():
 													path.get_point_position(conn).y))									
 				carve_path(start, end)
 		corridors.append(p)
-				
+		
+	make_player()
+
 func carve_path(pos1, pos2):
 	# Carve a path between two points
 	var x_diff = sign(pos2.x - pos1.x)
@@ -216,6 +225,22 @@ func find_end_room():
 		if room.position.x > max_x:
 			end_room = room
 			max_x = room.position.x
+
+func make_player():
+	player = Player.instance()
+	player.position = start_room.position
+	player.set_name("Player")
+	add_child(player)
+	
+	
+	enemy = Enemy.instance()
+	enemy.position = start_room.position
+	enemy.position.x += 64
+	enemy.position.y += 64
+	
+	add_child(enemy)
+	
+	play_mode = true
 
 func add_enemy_to_rooms():
 	for room in $Rooms.get_children():

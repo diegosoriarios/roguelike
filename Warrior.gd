@@ -30,15 +30,11 @@ func get_input():
 		velocity.x += 1
 		$Sprite.flip_h = false
 		$Sprite.play("walk")
-		$Sword/Sprite.flip_h = false
-		$Sword.position = Vector2(18, 0)
 	elif Input.is_action_pressed('ui_left'):
 		face = "left"
 		velocity.x -= 1
 		$Sprite.flip_h = true
 		$Sprite.play("walk")
-		$Sword/Sprite.flip_h = true
-		$Sword.position = Vector2(-18, 0)
 	elif Input.is_action_pressed('ui_up'):
 		face = "up"
 		velocity.y -= 1
@@ -54,13 +50,27 @@ func get_input():
 		if can_dash:
 			dash()
 	elif Input.is_action_just_pressed("attack"):
-		#attack = true
-		if mana > 0:
-			shoot()
-	#elif Input.is_action_released("attack"):
-	#	$Sword.hide()
+		attack()
+		#if mana > 0:
+		#	shoot()
+	if Input.is_action_just_released("attack"):
+		#$Sword.hide()
+		pass
 	
 	velocity = velocity.normalized() * speed
+
+func attack():
+	var colision = null
+	if face == "right":
+		colision = $Swords/Right
+	elif face == "left":	
+		colision = $Swords/Left
+	elif face == "up":
+		colision = $Swords/Up
+	elif face == "down":
+		colision = $Swords/Down
+	
+	check_colision(colision)
 
 func shoot():
 	mana_update = false
@@ -106,29 +116,33 @@ func shoot():
 
 func dash():
 	can_dash = false
-	$Sprite.visible = false
 	speed = 1000
 	timer.wait_time = .1
 	timer.one_shot = true
+	timer.set_name("Timer")
 	add_child(timer)
 	timer.start()
 	timer.connect("timeout", self, "_on_dash_time_out")
 
 func _on_dash_time_out():
-	$Sprite.visible = true
 	speed = 250
-	remove_child(find_node("Timer"))
+	for child in get_children():
+		if child.name == "Timer":
+			remove_child(child)
 	
 	var new_timer = Timer.new()
 	new_timer.wait_time = .5
 	new_timer.one_shot = true
+	new_timer.set_name("Dash_Timer")
 	add_child(new_timer)
 	new_timer.start()
 	new_timer.connect("timeout", self, "_on_can_dash_time_out")
 
 func _on_can_dash_time_out():
 	can_dash = true
-	remove_child(find_node("Timer"))
+	for child in get_children():
+		if child.name == "Dash_Timer":
+			remove_child(child)
 
 func _physics_process(delta):
 	get_input()
@@ -138,16 +152,6 @@ func _physics_process(delta):
 	#	get_parent().find_node("CanvasLayer").find_node("Label").text = "Mana: " + str(floor(mana)) 
 	#	mana = min(mana, 100)
 	
-	#Attack
-	if attack:
-		animationFrame += 1
-		$Sword.show()
-		if animationFrame == 30:
-			attack = false
-			animationFrame = 0
-			$Sword.hide()
-			$Sword/Sprite.rotate(0)
-	
 	velocity = move_and_slide(velocity)
 	
 func get_hit():
@@ -155,3 +159,12 @@ func get_hit():
 	self.position.x += rand_range(-32, 32)
 	self.position.y += rand_range(-32, 32)
 	
+
+func check_colision(colision):
+	colision.find_node("CollisionShape2D").disabled = false
+	var bodies = colision.get_overlapping_bodies()
+	
+	for body in bodies:
+		if body.is_in_group("enemies"):
+			print(body.name)
+			body.hit()

@@ -8,7 +8,7 @@ var mass = 200
 
 var text setget set_text, get_text
 
-func _ready():	
+func _ready():
 	tween.interpolate_property(self, "modulate", 
 		Color(modulate.r, modulate.g, modulate.b, modulate.a), 
 		Color(modulate.r, modulate.g, modulate.b, 0.0),

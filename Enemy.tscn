@@ -30,7 +30,7 @@ animations = [ {
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 12.0293, 12.0735 )
 
-[node name="Enemy" type="Area2D" groups=[
+[node name="Enemy" type="KinematicBody2D" groups=[
 "enemies",
 ]]
 script = ExtResource( 1 )
