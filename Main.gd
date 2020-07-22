@@ -254,3 +254,4 @@ func add_enemy_to_rooms():
 			var pos_y = room.position.y + size_y
 			enemy.position.x = pos_x
 			enemy.position.y = pos_y
+			room.enemies.append(enemy)

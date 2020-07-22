@@ -3,30 +3,14 @@ extends KinematicBody2D
 var lives = 100
 var isAttacking
 var Floating_text = preload("res://FloatingText.tscn")
+var player
 
 func _physics_process(delta):
 	#var areas = get_overlapping_areas()
 	
-	"""
-	#isAttacking = $".."/Character.attack
-	#isAttacking = true
-	
-	for area in areas:
-		if area.name == 'Sword' and isAttacking:
-			self.position.x += rand_range(-32, 32)
-			self.position.y += rand_range(-32, 32)
-	
-	var bodies = get_overlapping_bodies()
-	
-	for body in bodies:
-		if body.name == 'Character':
-			$".."/Character.get_hit()
-	
-	#for raycast in $Raycasts.get_children():
-		
-	#	if raycast.is_colliding() and raycast.get_collider().is_in_group('player''):
-	#		print(raycast.get_collider().name)
-	"""
+	if isAttacking:
+		var dir = (player.global_position - global_position).normalized()
+		move_and_collide(dir * 100 * delta)
 
 func hit():
 	var damage = int(rand_range(0, 10))
@@ -44,3 +28,7 @@ func hit():
 	
 	if lives <= 0:
 		queue_free()
+
+func attack_player(obj):
+	player = obj
+	isAttacking = true
