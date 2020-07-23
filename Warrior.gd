@@ -4,6 +4,7 @@ export var id = 0
 export var speed = 250
 var animationFrame = 0
 export var attack = false
+var attack_frame = 1
 var velocity = Vector2()
 var lifes = 3
 var bulletNumber = 1
@@ -29,30 +30,38 @@ func get_input():
 		face = "right"
 		velocity.x += 1
 		$Sprite.flip_h = false
-		$Sprite.play("walk")
+		$weapon_sword.flip_h = true
+		$weapon_sword.position = Vector2(0,0)
+		#$Sprite.play("walk")
 	elif Input.is_action_pressed('ui_left'):
 		face = "left"
 		velocity.x -= 1
 		$Sprite.flip_h = true
-		$Sprite.play("walk")
+		$weapon_sword.flip_h = false
+		$weapon_sword.position.x = 36
+		#$Sprite.play("walk")
 	elif Input.is_action_pressed('ui_up'):
 		face = "up"
 		velocity.y -= 1
-		$Sprite.play("walk")
+		#$Sprite.play("walk")
 	elif Input.is_action_pressed('ui_down'):
 		face = "down"
 		velocity.y += 1
-		$Sprite.play("walk")
+		#$Sprite.play("walk")
 	else:
-		$Sprite.play("idle")
+		#$Sprite.play("idle")
+		pass
 	
 	if Input.is_action_just_pressed("dash"):
 		if can_dash:
 			dash()
-	elif Input.is_action_just_pressed("attack"):
-		attack()
+		#attack()
 		#if mana > 0:
 		#	shoot()
+	elif Input.is_action_just_pressed("attack"):
+		if !attack:
+			attack = true
+			$AnimationPlayer.play("attack"+str(attack_frame))
 	if Input.is_action_just_released("attack"):
 		#$Sword.hide()
 		pass
@@ -63,14 +72,21 @@ func attack():
 	var colision = null
 	if face == "right":
 		colision = $Swords/Right
-	elif face == "left":	
+	elif face == "left":
 		colision = $Swords/Left
 	elif face == "up":
 		colision = $Swords/Up
 	elif face == "down":
 		colision = $Swords/Down
 	
+	attack_frame += 1
+	if attack_frame == 4:
+		attack_frame = 1
+	
 	check_colision(colision)
+
+func stop_attack():
+	attack = false
 
 func shoot():
 	mana_update = false
@@ -116,19 +132,23 @@ func shoot():
 
 func dash():
 	can_dash = false
-	speed = 1000
-	timer.wait_time = .1
-	timer.one_shot = true
-	timer.set_name("Timer")
-	add_child(timer)
-	timer.start()
-	timer.connect("timeout", self, "_on_dash_time_out")
+	speed = 500
+	#$Sprite.play("roll")
+	$AnimationPlayer.play("roll")
+	#timer.wait_time = .1
+	#timer.one_shot = true
+	#timer.set_name("Timer")
+	#add_child(timer)
+	#timer.start()
+	#timer.connect("timeout", self, "_on_dash_time_out")
 
-func _on_dash_time_out():
+func on_dash_time_out():
+	print("aqui")
+	$AnimationPlayer.stop()
 	speed = 250
-	for child in get_children():
-		if child.name == "Timer":
-			remove_child(child)
+	#for child in get_children():
+	#	if child.name == "Timer":
+	#		remove_child(child)
 	
 	var new_timer = Timer.new()
 	new_timer.wait_time = .5
@@ -146,6 +166,7 @@ func _on_can_dash_time_out():
 
 func _physics_process(delta):
 	get_input()
+	animate(delta)
 	
 	#if mana_update:
 	#	mana += rand_range(0, 10)
@@ -168,3 +189,17 @@ func check_colision(colision):
 		if body.is_in_group("enemies"):
 			print(body.name)
 			body.hit()
+
+func animate(delta):
+	if !can_dash:
+		$Sprite.play("roll")
+	elif attack:
+		$Sprite.play("attack"+str(attack_frame))
+	else:
+		if Input.is_action_pressed('ui_right') or \
+		Input.is_action_pressed('ui_left') or \
+		Input.is_action_pressed('ui_up') or \
+		Input.is_action_pressed('ui_down'):
+			$Sprite.play("walk")
+		else:
+			$Sprite.play("idle")
