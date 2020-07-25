@@ -3,7 +3,8 @@ extends Node2D
 var Room = preload("res://Room.tscn")
 #var Player = preload("res://Wizzard.tscn")
 var Player = preload("res://Warrior.tscn")
-var Enemy = preload("res://Enemy.tscn")
+#var Enemy = preload("res://Enemy.tscn")
+var Enemy = preload("res://Enemies/Bat.tscn")
 var Potion = preload("res://Potion.tscn")
 var Hatch = preload("res://Hatch.tscn")
 var Chest = preload("res://Chest.tscn")
@@ -244,7 +245,7 @@ func make_player():
 
 func add_enemy_to_rooms():
 	for room in $Rooms.get_children():
-		if (randf() > .9):
+		if (randf() > .5):
 			enemy = Enemy.instance()
 			add_child(enemy)
 			enemy.position = room.position
