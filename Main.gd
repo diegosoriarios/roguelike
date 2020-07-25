@@ -244,7 +244,7 @@ func make_player():
 
 func add_enemy_to_rooms():
 	for room in $Rooms.get_children():
-		if (randf() > .5):
+		if (randf() > .9):
 			enemy = Enemy.instance()
 			add_child(enemy)
 			enemy.position = room.position

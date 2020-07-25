@@ -6,17 +6,26 @@ var animationFrame = 0
 export var attack = false
 var attack_frame = 1
 var velocity = Vector2()
-var lifes = 3
 var bulletNumber = 1
 
 var Bullet = preload('res://Bullet.tscn')
 
 onready var timer = Timer.new()
+onready var hp_bar = get_parent().find_node("CanvasLayer").find_node("HP")
+onready var mana_bar = get_parent().find_node("CanvasLayer").find_node("Stamina")
 
 var face = "right"
 var can_dash = true
+var hp = 100
 var mana = 100
+var mana_dash_cost = 10
+var mana_shoot_cost = 10
 var mana_update = false
+var dash_stop = true
+
+func _ready():
+	update_hp(hp)
+	update_mana(mana)
 
 func _input(event):
 	if event.is_action_pressed('scroll_up'):
@@ -53,13 +62,13 @@ func get_input():
 		pass
 	
 	if Input.is_action_just_pressed("dash"):
-		if can_dash:
+		if can_dash and mana - mana_dash_cost >= 0:
 			dash()
 		#attack()
 		#if mana > 0:
 		#	shoot()
 	elif Input.is_action_just_pressed("attack"):
-		if !attack:
+		if !attack and mana - mana_shoot_cost >= 0:
 			attack = true
 			$AnimationPlayer.play("attack"+str(attack_frame))
 	if Input.is_action_just_released("attack"):
@@ -69,6 +78,7 @@ func get_input():
 	velocity = velocity.normalized() * speed
 
 func attack():
+	mana_update = false
 	var colision = null
 	if face == "right":
 		colision = $Swords/Right
@@ -126,15 +136,20 @@ func shoot():
 		mana -= rand_range(0, 10)
 		mana = max(0, mana)
 		mana_update = true
-		get_parent().find_node("CanvasLayer").find_node("Label").text = "Mana: " + str(mana) 
+		get_parent().find_node("CanvasLayer").find_node("Stamina").value = mana
 	
 	
 
 func dash():
 	can_dash = false
+	dash_stop = false
 	speed = 500
 	#$Sprite.play("roll")
 	$AnimationPlayer.play("roll")
+	mana_update = true
+	mana -= mana_dash_cost
+	$ManaUpdate.start()
+	update_mana(mana)
 	#timer.wait_time = .1
 	#timer.one_shot = true
 	#timer.set_name("Timer")
@@ -144,6 +159,7 @@ func dash():
 
 func on_dash_time_out():
 	print("aqui")
+	dash_stop = true
 	$AnimationPlayer.stop()
 	speed = 250
 	#for child in get_children():
@@ -176,12 +192,16 @@ func _physics_process(delta):
 	velocity = move_and_slide(velocity)
 	
 func get_hit():
-	lifes -= 1
+	hp -= 10
 	self.position.x += rand_range(-32, 32)
 	self.position.y += rand_range(-32, 32)
 	
 
 func check_colision(colision):
+	mana_update = true
+	mana -= mana_shoot_cost
+	$ManaUpdate.start()
+	update_mana(mana)
 	colision.find_node("CollisionShape2D").disabled = false
 	var bodies = colision.get_overlapping_bodies()
 	
@@ -191,7 +211,7 @@ func check_colision(colision):
 			body.hit()
 
 func animate(delta):
-	if !can_dash:
+	if !dash_stop:
 		$Sprite.play("roll")
 	elif attack:
 		$Sprite.play("attack"+str(attack_frame))
@@ -203,3 +223,19 @@ func animate(delta):
 			$Sprite.play("walk")
 		else:
 			$Sprite.play("idle")
+
+func update_mana(mana):
+	mana_bar.value = mana
+
+func update_hp(hp):
+	hp_bar.value = hp
+
+
+func _on_ManaUpdate_timeout():
+	print(mana)
+	mana += 2
+	update_mana(mana)
+	if mana >= 100:
+		mana = 100
+		mana_update = false
+		$ManaUpdate.stop()

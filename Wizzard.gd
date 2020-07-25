@@ -4,18 +4,28 @@ export var id = 0
 export var speed = 250
 var animationFrame = 0
 export var attack = false
+var attack_frame = 1
 var velocity = Vector2()
-var lifes = 3
 var bulletNumber = 1
 
 var Bullet = preload('res://Bullet.tscn')
+var Smoke = preload("res://Smoke.tscn")
 
 onready var timer = Timer.new()
+onready var hp_bar = get_parent().find_node("CanvasLayer").find_node("HP")
+onready var mana_bar = get_parent().find_node("CanvasLayer").find_node("Stamina")
 
 var face = "right"
 var can_dash = true
+var hp = 100
 var mana = 100
+var mana_dash_cost = 10
+var mana_shoot_cost = 10
 var mana_update = false
+
+func _ready():
+	update_hp(hp)
+	update_mana(mana)
 
 func _input(event):
 	if event.is_action_pressed('scroll_up'):
@@ -29,34 +39,27 @@ func get_input():
 		face = "right"
 		velocity.x += 1
 		$Sprite.flip_h = false
-		$Sprite.play("walk")
-		$Sword/Sprite.flip_h = false
-		$Sword.position = Vector2(18, 0)
 	elif Input.is_action_pressed('ui_left'):
 		face = "left"
 		velocity.x -= 1
 		$Sprite.flip_h = true
-		$Sprite.play("walk")
-		$Sword/Sprite.flip_h = true
-		$Sword.position = Vector2(-18, 0)
 	elif Input.is_action_pressed('ui_up'):
 		face = "up"
 		velocity.y -= 1
-		$Sprite.play("walk")
 	elif Input.is_action_pressed('ui_down'):
 		face = "down"
 		velocity.y += 1
-		$Sprite.play("walk")
 	else:
-		$Sprite.play("idle")
+		#$Sprite.play("idle")
+		pass
 	
 	if Input.is_action_just_pressed("dash"):
-		if can_dash:
+		if can_dash and mana - mana_dash_cost >= 0:
 			dash()
 	elif Input.is_action_just_pressed("attack"):
-		#attack = true
-		if mana > 0:
-			shoot()
+		if mana - mana_shoot_cost >= 0 and !attack:
+			attack = true
+			$AnimationPlayer.play("attack"+str(attack_frame))
 	#elif Input.is_action_released("attack"):
 	#	$Sword.hide()
 	
@@ -93,28 +96,47 @@ func shoot():
 	
 	# Bullet 3
 	for i in range(bulletNumber):
+		var mana_cost = int(rand_range(0, 10))
+		mana -= mana_shoot_cost
+		mana_update = true
+		$ManaUpdate.start()
+		update_mana(mana)
 		bullet = Bullet.instance()
 		var degree = 360/bulletNumber
 		bullet.start(position, direction - deg2rad(degree * i), self)
 		get_parent().add_child(bullet)
-		mana -= rand_range(0, 10)
-		mana = max(0, mana)
-		mana_update = true
-		get_parent().find_node("CanvasLayer").find_node("Label").text = "Mana: " + str(mana) 
-	
-	
+
+func stop_attack():
+	attack_frame += 1
+	if attack_frame == 3:
+		attack_frame = 1
+	attack = false
 
 func dash():
+	mana -= mana_dash_cost
+	$ManaUpdate.start()
+	update_mana(mana)
+	var smoke = Smoke.instance()
+	smoke.position.x = position.x
+	smoke.position.y = position.y
+	smoke.find_node("AnimationPlayer").play("start")
+	print(smoke.position)
+	get_parent().add_child(smoke)
 	can_dash = false
 	$Sprite.visible = false
 	speed = 1000
-	timer.wait_time = .1
+	timer.wait_time = .2
 	timer.one_shot = true
 	add_child(timer)
 	timer.start()
 	timer.connect("timeout", self, "_on_dash_time_out")
 
 func _on_dash_time_out():
+	var smoke = Smoke.instance()
+	smoke.position.x = position.x
+	smoke.position.y = position.y
+	smoke.find_node("AnimationPlayer").play("start")
+	get_parent().add_child(smoke)
 	$Sprite.visible = true
 	speed = 250
 	remove_child(find_node("Timer"))
@@ -132,26 +154,47 @@ func _on_can_dash_time_out():
 
 func _physics_process(delta):
 	get_input()
+	animate(delta)
 	
 	#if mana_update:
 	#	mana += rand_range(0, 10)
 	#	get_parent().find_node("CanvasLayer").find_node("Label").text = "Mana: " + str(floor(mana)) 
 	#	mana = min(mana, 100)
 	
-	#Attack
-	if attack:
-		animationFrame += 1
-		$Sword.show()
-		if animationFrame == 30:
-			attack = false
-			animationFrame = 0
-			$Sword.hide()
-			$Sword/Sprite.rotate(0)
-	
 	velocity = move_and_slide(velocity)
 	
-func get_hit():
-	lifes -= 1
+func get_hit(damage):
+	hp -= damage
 	self.position.x += rand_range(-32, 32)
 	self.position.y += rand_range(-32, 32)
-	
+
+func animate(delta):
+	if !can_dash:
+		#$Sprite.play("roll")
+		pass
+	elif attack:
+		$Sprite.play("attack"+str(attack_frame))
+	else:
+		if Input.is_action_pressed('ui_right') or \
+		Input.is_action_pressed('ui_left') or \
+		Input.is_action_pressed('ui_up') or \
+		Input.is_action_pressed('ui_down'):
+			$Sprite.play("walk")
+		else:
+			$Sprite.play("idle")
+
+func update_mana(mana):
+	mana_bar.value = mana
+
+func update_hp(hp):
+	hp_bar.value = hp
+
+
+func _on_ManaUpdate_timeout():
+	print(mana)
+	mana += 2
+	update_mana(mana)
+	if mana >= 100:
+		mana = 100
+		mana_update = false
+		$ManaUpdate.stop()
