@@ -17,4 +17,5 @@ func _on_Area2D_body_entered(body):
 	if body.is_in_group("player"):
 		print(body.name)
 		for enemy in enemies:
-			enemy.attack_player(body)
+			if body:
+				enemy.attack_player(body)

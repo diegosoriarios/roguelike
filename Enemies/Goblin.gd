@@ -16,12 +16,18 @@ func _physics_process(delta):
 	#var areas = get_overlapping_areas()
 	
 	if isAttacking:
+		if !got_hit and !attack:
+			$Sprite.play("walk")
+			$AnimationPlayer.play("walk")
 		if player.global_position.x > global_position.x:
 			$Sprite.flip_h = false
 		else:
 			$Sprite.flip_h = true
 		var dir = (player.global_position - global_position).normalized()
 		move_and_collide(dir * 100 * delta)
+	else:
+		$Sprite.play("idle")
+		$AnimationPlayer.play("idle")
 
 func hit_player():
 	if player:
