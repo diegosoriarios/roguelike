@@ -63,13 +63,13 @@ func get_input():
 		pass
 	
 	if Input.is_action_just_pressed("dash"):
-		if can_dash and mana - mana_dash_cost >= 0 and !attack:
+		if can_dash and mana - mana_dash_cost >= 0 and !attack and !hurt:
 			dash()
 		#attack()
 		#if mana > 0:
 		#	shoot()
 	elif Input.is_action_just_pressed("attack"):
-		if !attack and mana - mana_shoot_cost >= 0 and can_dash:
+		if !attack and mana - mana_shoot_cost >= 0 and can_dash and !hurt:
 			attack = true
 			$Sprite.play("attack"+str(attack_frame))
 			$AnimationPlayer.play("attack"+str(attack_frame))
@@ -196,6 +196,7 @@ func _physics_process(delta):
 	velocity = move_and_slide(velocity)
 	
 func get_hit():
+	stop_attack()
 	hp -= 10
 	update_hp(hp)
 	hurt = true
@@ -221,12 +222,15 @@ func check_colision(colision):
 
 func animate(delta):
 	if !dash_stop:
+		print('dash_stop')
 		#$Sprite.play("roll")
 		pass
 	elif attack:
+		print('attack')
 		#$Sprite.play("attack"+str(attack_frame))
 		pass
 	elif hurt:
+		print('hurt')
 		pass
 		#$Sprite.play("hurt")
 	else:
@@ -235,7 +239,9 @@ func animate(delta):
 		Input.is_action_pressed('ui_up') or \
 		Input.is_action_pressed('ui_down'):
 			$Sprite.play("walk")
+			print('elsewalks')
 		else:
+			print('idle')
 			$Sprite.play("idle")
 
 func update_mana(mana):
@@ -249,7 +255,7 @@ func stop_hurt():
 
 func _on_ManaUpdate_timeout():
 	print(mana)
-	mana += 2
+	mana += 5
 	update_mana(mana)
 	if mana >= 100:
 		mana = 100
