@@ -50,7 +50,7 @@ func get_input():
 		$weapon_sword.flip_h = false
 		$weapon_sword.position.x = 36
 		#$Sprite.play("walk")
-	elif Input.is_action_pressed('ui_up'):
+	if Input.is_action_pressed('ui_up'):
 		face = "up"
 		velocity.y -= 1
 		#$Sprite.play("walk")
