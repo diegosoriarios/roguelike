@@ -163,7 +163,7 @@ func _physics_process(delta):
 	
 	velocity = move_and_slide(velocity)
 	
-func get_hit(damage):
+func get_hit(damage = 10):
 	hp -= damage
 	self.position.x += rand_range(-32, 32)
 	self.position.y += rand_range(-32, 32)
