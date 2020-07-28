@@ -1,0 +1,148 @@
+[gd_scene load_steps=21 format=2]
+
+[ext_resource path="res://assets/chest.png" type="Texture" id=1]
+[ext_resource path="res://assets/Keyboard Black.png" type="Texture" id=2]
+[ext_resource path="res://assets/Keyboard Black(pressed).png" type="Texture" id=3]
+[ext_resource path="res://Scripts/Enemies/Chester.gd" type="Script" id=4]
+[ext_resource path="res://assets/Enemies/Blob/attack-A2.png" type="Texture" id=5]
+[ext_resource path="res://assets/Enemies/Blob/attack-A3.png" type="Texture" id=6]
+[ext_resource path="res://assets/Enemies/Blob/attack-A9.png" type="Texture" id=7]
+[ext_resource path="res://assets/Enemies/Blob/attack-A8.png" type="Texture" id=8]
+[ext_resource path="res://assets/Enemies/Blob/attack-A1.png" type="Texture" id=9]
+[ext_resource path="res://assets/Enemies/Blob/attack-A4.png" type="Texture" id=10]
+[ext_resource path="res://assets/Enemies/Blob/attack-A5.png" type="Texture" id=11]
+[ext_resource path="res://assets/Enemies/Blob/attack-A6.png" type="Texture" id=12]
+[ext_resource path="res://assets/Enemies/Blob/attack-A10.png" type="Texture" id=13]
+[ext_resource path="res://assets/Enemies/Blob/attack-A7.png" type="Texture" id=14]
+[ext_resource path="res://assets/chest-front.png" type="Texture" id=15]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 9.3, 7.525 )
+
+[sub_resource type="SpriteFrames" id=5]
+animations = [ {
+"frames": [ ExtResource( 9 ), ExtResource( 5 ), ExtResource( 6 ), ExtResource( 10 ), ExtResource( 11 ), ExtResource( 12 ), ExtResource( 14 ), ExtResource( 8 ), ExtResource( 7 ), ExtResource( 13 ) ],
+"loop": true,
+"name": "attack",
+"speed": 5.0
+} ]
+
+[sub_resource type="Animation" id=2]
+resource_name = "open"
+length = 1.2
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4, 0.6, 0.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 77, 78, 79, 80, 81 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Monster:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1, 1.05, 1.1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Monster:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.7 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ false, true ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("ChestFront:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.7 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ false, true ]
+}
+tracks/4/type = "method"
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 1 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "attack"
+} ]
+}
+
+[sub_resource type="SpriteFrames" id=3]
+animations = [ {
+"frames": [ ExtResource( 2 ), ExtResource( 3 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="CircleShape2D" id=4]
+radius = 19.5059
+
+[node name="Chester" type="StaticBody2D" groups=[
+"interactive",
+]]
+script = ExtResource( 4 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+vframes = 12
+hframes = 7
+frame = 77
+
+[node name="Monster" type="AnimatedSprite" parent="."]
+visible = false
+position = Vector2( 1.90034, -15.476 )
+scale = Vector2( 0.423404, 0.445564 )
+frames = SubResource( 5 )
+animation = "attack"
+
+[node name="ChestFront" type="Sprite" parent="."]
+visible = false
+position = Vector2( 0.46875, 2.98438 )
+texture = ExtResource( 15 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/open = SubResource( 2 )
+
+[node name="Keyboard" type="AnimatedSprite" parent="."]
+visible = false
+position = Vector2( 0, -18 )
+z_index = 4
+frames = SubResource( 3 )
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource( 4 )
+[connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_Area2D_body_exited"]

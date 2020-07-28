@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://icon.png" type="Texture" id=1]
+[ext_resource path="res://assets/Dungeon Tileset.png" type="Texture" id=1]
 [ext_resource path="res://Hatch.gd" type="Script" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
@@ -11,8 +11,12 @@ scale = Vector2( 2, 2 )
 script = ExtResource( 2 )
 
 [node name="icon" type="Sprite" parent="."]
-scale = Vector2( 0.2, 0.2 )
+position = Vector2( -0.046874, -0.0312514 )
+scale = Vector2( 0.838671, 0.742968 )
 texture = ExtResource( 1 )
+vframes = 10
+hframes = 12
+frame = 111
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
