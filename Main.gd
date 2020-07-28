@@ -6,7 +6,9 @@ var Player = preload("res://Warrior.tscn")
 #var Enemy = preload("res://Enemy.tscn")
 #var Enemy = preload("res://Enemies/Bat.tscn")
 #var Enemy = preload("res://Enemies/Goblin.tscn")
-var Enemy = preload("res://Enemies/Skeleton.tscn")
+#var Enemy = preload("res://Enemies/Skeleton.tscn")
+#var Enemy = preload("res://Enemies/Blob.tscn")
+var Enemy = preload("res://Enemies/Slime2.tscn")
 var Potion = preload("res://Potion.tscn")
 var Hatch = preload("res://Hatch.tscn")
 var Chest = preload("res://Chest.tscn")
@@ -236,12 +238,12 @@ func make_player():
 	add_child(player)
 	
 	
-	enemy = Enemy.instance()
-	enemy.position = start_room.position
-	enemy.position.x += 64
-	enemy.position.y += 64
+	#enemy = Enemy.instance()
+	#enemy.position = start_room.position
+	#enemy.position.x += 64
+	#enemy.position.y += 64
 	
-	add_child(enemy)
+	#add_child(enemy)
 	
 	play_mode = true
 
@@ -251,6 +253,7 @@ func add_enemy_to_rooms():
 			enemy = Enemy.instance()
 			add_child(enemy)
 			enemy.position = room.position
+			enemy.room = room
 			var size_x = rand_range(-room.size.x/2, room.size.x/2)
 			var size_y = rand_range(-room.size.y/2, room.size.y/2)
 			var pos_x = room.position.x + size_x

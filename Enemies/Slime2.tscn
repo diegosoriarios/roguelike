@@ -1,0 +1,143 @@
+[gd_scene load_steps=16 format=2]
+
+[ext_resource path="res://assets/Enemies/Slime/Variant1/Slime_Death_0.png" type="Texture" id=1]
+[ext_resource path="res://assets/Enemies/Slime/Variant1/Slime_Walk_3.png" type="Texture" id=2]
+[ext_resource path="res://Scripts/Enemies/Bat.gd" type="Script" id=3]
+[ext_resource path="res://assets/Enemies/Slime/Variant1/Slime_Walk_2.png" type="Texture" id=4]
+[ext_resource path="res://assets/Enemies/Slime/Variant1/Slime_Walk_1.png" type="Texture" id=5]
+[ext_resource path="res://assets/Enemies/Slime/Variant1/Slime_Death_2.png" type="Texture" id=6]
+[ext_resource path="res://assets/Enemies/Slime/Variant1/Slime_Death_1.png" type="Texture" id=7]
+[ext_resource path="res://assets/Enemies/Slime/Variant1/Slime_Death_3.png" type="Texture" id=8]
+[ext_resource path="res://assets/Enemies/Slime/Variant1/Slime_Walk_0.png" type="Texture" id=9]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 9 ), ExtResource( 5 ), ExtResource( 4 ), ExtResource( 2 ) ],
+"loop": true,
+"name": "idle",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 1 ), ExtResource( 7 ), ExtResource( 6 ), ExtResource( 8 ) ],
+"loop": true,
+"name": "attack",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 1 ), ExtResource( 7 ), ExtResource( 6 ), ExtResource( 8 ) ],
+"loop": true,
+"name": "hurt",
+"speed": 5.0
+} ]
+
+[sub_resource type="CircleShape2D" id=2]
+
+[sub_resource type="Animation" id=3]
+resource_name = "attack"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.6, 0.7 ),
+"transitions": PoolRealArray( 1, 1 ),
+"values": [ {
+"args": [  ],
+"method": "hit_player"
+}, {
+"args": [  ],
+"method": "stop_attack"
+} ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "hurt"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2 ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.2 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "stop_hurt"
+} ]
+}
+
+[sub_resource type="Animation" id=5]
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3 ]
+}
+
+[sub_resource type="CircleShape2D" id=6]
+radius = 24.8739
+
+[node name="Slime2" type="KinematicBody2D" groups=[
+"enemies",
+]]
+scale = Vector2( 0.25, 0.25 )
+script = ExtResource( 3 )
+
+[node name="Sprite" type="AnimatedSprite" parent="."]
+position = Vector2( 3.375, -42 )
+frames = SubResource( 1 )
+animation = "attack"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 2 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/attack = SubResource( 3 )
+anims/hurt = SubResource( 4 )
+anims/idle = SubResource( 5 )
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource( 6 )
+
+[node name="Attack" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+[connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_Area2D_body_exited"]
+[connection signal="timeout" from="Attack" to="." method="_on_can_attack"]

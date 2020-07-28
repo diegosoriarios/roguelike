@@ -22,6 +22,7 @@ var mana_dash_cost = 10
 var mana_shoot_cost = 10
 var mana_update = false
 var dash_stop = true
+var dash_direction = ""
 var hurt = false
 
 func _ready():
@@ -37,6 +38,7 @@ func _input(event):
 func get_input():
 	velocity = Vector2()
 	if Input.is_action_pressed('ui_right'):
+		#if $AnimationPlayer.current_animation != "roll" or ($AnimationPlayer.current_animation == "roll" and dash_direction == "right"):
 		face = "right"
 		velocity.x += 1
 		$Sprite.flip_h = false
@@ -63,7 +65,9 @@ func get_input():
 		pass
 	
 	if Input.is_action_just_pressed("dash"):
-		if can_dash and mana - mana_dash_cost >= 0 and !attack and !hurt:
+		if can_dash and mana - mana_dash_cost >= 0:
+			attack = false
+			hurt = false
 			dash()
 		#attack()
 		#if mana > 0:
@@ -144,8 +148,11 @@ func shoot():
 	
 
 func dash():
+	dash_direction = face
 	can_dash = false
 	dash_stop = false
+	hurt = false
+	attack = false
 	speed = 500
 	#$Sprite.play("roll")
 	$Sprite.play("roll")

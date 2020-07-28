@@ -27,6 +27,8 @@ func hit():
 	get_parent().add_child(floating_text)
 	
 	if lives <= 0:
+		var index = room.enemies.find(self, 0)
+		room.enemies.remove(index)
 		queue_free()
 
 func attack_player(obj):

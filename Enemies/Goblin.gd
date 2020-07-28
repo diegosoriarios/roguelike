@@ -7,6 +7,7 @@ var Floating_text = preload("res://FloatingText.tscn")
 var player
 var got_hit = false
 var playerIsClose = null
+var room = null
 
 func _ready():
 	$Sprite.play("idle")
@@ -51,7 +52,10 @@ func hit():
 	get_parent().add_child(floating_text)
 	
 	if lives <= 0:
+		var index = room.enemies.find(self, 0)
+		room.enemies.remove(index)
 		queue_free()
+		
 
 func attack_player(obj):
 	player = obj
