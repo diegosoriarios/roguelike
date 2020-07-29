@@ -1,12 +1,8 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://assets/tiles.tres" type="TileSet" id=2]
-[ext_resource path="res://assets/UI/Health Bar Asset Pack 2 by Adwit Rahman/HealthBar UNDER.png" type="Texture" id=3]
-[ext_resource path="res://assets/UI/Health Bar Asset Pack 2 by Adwit Rahman/blue.png" type="Texture" id=4]
-[ext_resource path="res://assets/UI/Health Bar Asset Pack 2 by Adwit Rahman/red.png" type="Texture" id=5]
-[ext_resource path="res://assets/UI/Health Bar Asset Pack 2 by Adwit Rahman/black.png" type="Texture" id=6]
-[ext_resource path="res://assets/UI/Health Bar Asset Pack 2 by Adwit Rahman/HealthBar DARK.png" type="Texture" id=7]
+[ext_resource path="res://CanvasLayer.tscn" type="PackedScene" id=3]
 
 [node name="Main" type="Node2D"]
 script = ExtResource( 1 )
@@ -23,48 +19,4 @@ tile_set = ExtResource( 2 )
 cell_size = Vector2( 32, 32 )
 format = 1
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-[node name="HP" type="TextureProgress" parent="CanvasLayer"]
-anchor_left = -0.000172615
-anchor_top = -0.000147324
-anchor_right = -0.000172615
-anchor_bottom = -0.000147324
-margin_left = 90.1768
-margin_top = 47.0884
-margin_right = 200.177
-margin_bottom = 56.0884
-value = 50.0
-texture_under = ExtResource( 6 )
-texture_progress = ExtResource( 5 )
-nine_patch_stretch = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Sprite2" type="Sprite" parent="CanvasLayer"]
-position = Vector2( 146.7, 69.5049 )
-scale = Vector2( 1.38515, 1.38515 )
-texture = ExtResource( 3 )
-
-[node name="Stamina" type="TextureProgress" parent="CanvasLayer"]
-anchor_left = -0.000172615
-anchor_top = -0.000147324
-anchor_right = -0.000172615
-anchor_bottom = -0.000147324
-margin_left = 102.177
-margin_top = 66.0884
-margin_right = 190.177
-margin_bottom = 73.0884
-value = 50.0
-texture_under = ExtResource( 6 )
-texture_progress = ExtResource( 4 )
-nine_patch_stretch = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Sprite" type="Sprite" parent="CanvasLayer"]
-position = Vector2( 129.148, 51.6924 )
-scale = Vector2( 1.91924, 1.91924 )
-texture = ExtResource( 7 )
+[node name="CanvasLayer" parent="." instance=ExtResource( 3 )]

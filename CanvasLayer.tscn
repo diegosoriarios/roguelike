@@ -1,0 +1,53 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://assets/UI/Health Bar Asset Pack 2 by Adwit Rahman/black.png" type="Texture" id=1]
+[ext_resource path="res://assets/UI/Health Bar Asset Pack 2 by Adwit Rahman/HealthBar UNDER.png" type="Texture" id=2]
+[ext_resource path="res://assets/UI/Health Bar Asset Pack 2 by Adwit Rahman/blue.png" type="Texture" id=3]
+[ext_resource path="res://assets/UI/Health Bar Asset Pack 2 by Adwit Rahman/red.png" type="Texture" id=4]
+[ext_resource path="res://assets/UI/Health Bar Asset Pack 2 by Adwit Rahman/HealthBar DARK.png" type="Texture" id=5]
+
+[node name="CanvasLayer" type="CanvasLayer"]
+
+[node name="HP" type="TextureProgress" parent="."]
+anchor_left = -0.000172615
+anchor_top = -0.000147324
+anchor_right = -0.000172615
+anchor_bottom = -0.000147324
+margin_left = 90.1768
+margin_top = 47.0884
+margin_right = 200.177
+margin_bottom = 56.0884
+value = 50.0
+texture_under = ExtResource( 1 )
+texture_progress = ExtResource( 4 )
+nine_patch_stretch = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Sprite2" type="Sprite" parent="."]
+position = Vector2( 146.7, 69.5049 )
+scale = Vector2( 1.38515, 1.38515 )
+texture = ExtResource( 2 )
+
+[node name="Stamina" type="TextureProgress" parent="."]
+anchor_left = -0.000172615
+anchor_top = -0.000147324
+anchor_right = -0.000172615
+anchor_bottom = -0.000147324
+margin_left = 102.177
+margin_top = 66.0884
+margin_right = 190.177
+margin_bottom = 73.0884
+value = 50.0
+texture_under = ExtResource( 1 )
+texture_progress = ExtResource( 3 )
+nine_patch_stretch = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( 129.148, 51.6924 )
+scale = Vector2( 1.91924, 1.91924 )
+texture = ExtResource( 5 )
