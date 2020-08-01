@@ -19,7 +19,7 @@
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 9.3, 7.525 )
 
-[sub_resource type="SpriteFrames" id=5]
+[sub_resource type="SpriteFrames" id=2]
 animations = [ {
 "frames": [ ExtResource( 9 ), ExtResource( 5 ), ExtResource( 6 ), ExtResource( 10 ), ExtResource( 11 ), ExtResource( 12 ), ExtResource( 14 ), ExtResource( 8 ), ExtResource( 7 ), ExtResource( 13 ) ],
 "loop": true,
@@ -27,8 +27,7 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[sub_resource type="Animation" id=2]
-resource_name = "open"
+[sub_resource type="Animation" id=3]
 length = 1.2
 step = 0.05
 tracks/0/type = "value"
@@ -94,7 +93,7 @@ tracks/4/keys = {
 } ]
 }
 
-[sub_resource type="SpriteFrames" id=3]
+[sub_resource type="SpriteFrames" id=4]
 animations = [ {
 "frames": [ ExtResource( 2 ), ExtResource( 3 ) ],
 "loop": true,
@@ -102,7 +101,7 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[sub_resource type="CircleShape2D" id=4]
+[sub_resource type="CircleShape2D" id=5]
 radius = 19.5059
 
 [node name="Chester" type="StaticBody2D" groups=[
@@ -123,7 +122,7 @@ frame = 77
 visible = false
 position = Vector2( 1.90034, -15.476 )
 scale = Vector2( 0.423404, 0.445564 )
-frames = SubResource( 5 )
+frames = SubResource( 2 )
 animation = "attack"
 
 [node name="ChestFront" type="Sprite" parent="."]
@@ -132,17 +131,17 @@ position = Vector2( 0.46875, 2.98438 )
 texture = ExtResource( 15 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/open = SubResource( 2 )
+anims/open = SubResource( 3 )
 
 [node name="Keyboard" type="AnimatedSprite" parent="."]
 visible = false
 position = Vector2( 0, -18 )
 z_index = 4
-frames = SubResource( 3 )
+frames = SubResource( 4 )
 
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-shape = SubResource( 4 )
+shape = SubResource( 5 )
 [connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_Area2D_body_exited"]

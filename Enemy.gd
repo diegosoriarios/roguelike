@@ -4,6 +4,7 @@ var lives = 100
 var isAttacking
 var Floating_text = preload("res://FloatingText.tscn")
 var player
+var room
 
 func _physics_process(delta):
 	#var areas = get_overlapping_areas()

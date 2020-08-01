@@ -9,7 +9,7 @@ func _ready():
 
 
 func _process(delta):
-	if Input.is_action_just_pressed("dash"):
+	if Input.is_action_just_pressed("dash") and player:
 		$AnimationPlayer.play("open")
 		yield($AnimationPlayer, "animation_finished")
 		$Monster.visible = false

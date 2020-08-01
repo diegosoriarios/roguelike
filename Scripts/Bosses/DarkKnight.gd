@@ -47,6 +47,7 @@ func hit(damage = 10):
 	idle = 1 if randf() > .2 else 0
 	hp -= damage
 	if hp <= 0:
+		get_parent().next_room()
 		queue_free()
 	update_hp_bar(hp)
 

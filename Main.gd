@@ -9,7 +9,16 @@ var Player = preload("res://Warrior.tscn")
 #var Enemy = preload("res://Enemies/Skeleton.tscn")
 #var Enemy = preload("res://Enemies/Blob.tscn")
 #var Enemy = preload("res://Enemies/Slime2.tscn")
-var Enemy = preload("res://Enemies/Chester.tscn")
+#var Enemy = preload("res://Enemies/Chester.tscn")
+var enemies = [
+	preload("res://Enemy.tscn"),
+	preload("res://Enemies/Bat.tscn"),
+	preload("res://Enemies/Goblin.tscn"),
+	preload("res://Enemies/Skeleton.tscn"),
+	preload("res://Enemies/Blob.tscn"),
+	preload("res://Enemies/Slime2.tscn"),
+	preload("res://Enemies/Chester.tscn")
+]
 var Potion = preload("res://Potion.tscn")
 var Hatch = preload("res://Hatch.tscn")
 var Chest = preload("res://Chest.tscn")
@@ -100,12 +109,12 @@ func _input(event):
 		add_child(player)
 		
 		
-		enemy = Enemy.instance()
-		enemy.position = start_room.position
-		enemy.position.x += 64
-		enemy.position.y += 64
+		#enemy = Enemy.instance()
+		#enemy.position = start_room.position
+		#enemy.position.x += 64
+		#enemy.position.y += 64
 		
-		add_child(enemy)
+		#add_child(enemy)
 		
 		play_mode = true
 
@@ -251,6 +260,8 @@ func make_player():
 func add_enemy_to_rooms():
 	for room in $Rooms.get_children():
 		if (randf() > .1):
+			enemies.shuffle()
+			var Enemy = enemies.front()
 			enemy = Enemy.instance()
 			add_child(enemy)
 			enemy.position = room.position
