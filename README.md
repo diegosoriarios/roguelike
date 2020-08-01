@@ -3,5 +3,7 @@ Roguelike game using Godot
 
 ## Todo
 
-- [ ] Player attack
-- [ ] Enemy attack when is close
+- [ ] Create Animations
+- [ ] Setup Audio
+- [ ] Choose Character
+- [ ] Boos Fights
