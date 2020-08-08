@@ -170,7 +170,7 @@ func make_map():
 	var bottomright = Map.world_to_map(full_rect.end)
 	for x in range(topleft.x, bottomright.x):
 		for y in range(topleft.y, bottomright.y):
-			Map.set_cell(x, y, 1)	
+			Map.set_cell(x, y, 1)
 	
 	#START ROOM
 	var chest = Chest.instance()
@@ -260,7 +260,7 @@ func make_player():
 func add_enemy_to_rooms():
 	for room in $Rooms.get_children():
 		if (randf() > .1):
-			enemies.shuffle()
+			#enemies.shuffle()
 			var Enemy = enemies.front()
 			enemy = Enemy.instance()
 			add_child(enemy)

@@ -69,4 +69,5 @@ dash={
 
 [rendering]
 
+environment/default_clear_color=Color( 0.345098, 0.345098, 0.345098, 1 )
 environment/default_environment="res://default_env.tres"
