@@ -1,6 +1,6 @@
 extends KinematicBody2D
 
-var lives = 100
+var lives = 20
 var isAttacking
 var Floating_text = preload("res://FloatingText.tscn")
 var Blood  = preload("res://Blood.tscn")
