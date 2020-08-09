@@ -42,5 +42,5 @@ func _on_Timer_timeout():
 
 func _on_Collision_body_entered(body):
 	if body.name == "TileMap":
-		queue_free()
+		stop = true
 		pass

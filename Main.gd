@@ -192,6 +192,8 @@ func make_map():
 			for y in range(2, s.y * 2 - 1):
 				if randf() > .9:
 					Map.set_cell(ul.x + x, ul.y + y, 2)
+				#if y == 2:
+				#	Map.set_cell(ul.x + x, ul.y + y, 3)
 				else:
 					Map.set_cell(ul.x + x, ul.y + y, 0)
 		# Carve connecting corridor
